@@ -1,15 +1,22 @@
 package Job;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class WindowController implements Initializable {
@@ -39,4 +46,12 @@ public class WindowController implements Initializable {
         System.exit(-1);
     }
     var usefulData = response.body();
+
+    Type type = new TypeToken<Map<String, String>>(){}.getType();
+    var gson = new Gson();
+    Map<String, String> myMap = gson.fromJson(usefulData,type); //one string to another string
+    var dataAsList = new ArrayList<String>(myMap.keySet());
+    ObservableList<String> currencyType = FXCollections.observableList(dataAsList);
+        DataList.setItems(currencyType);
+     }
 }
